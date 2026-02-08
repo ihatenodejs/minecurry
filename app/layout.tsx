@@ -1,20 +1,22 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Zalando_Sans_Expanded, Zalando_Sans } from 'next/font/google';
+import './globals.css';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const zalandoSans = Zalando_Sans({
+  variable: '--font-zalando-sans',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const zalandoSansExpanded = Zalando_Sans_Expanded({
+  variable: '--font-zalando-sans-expanded',
+  subsets: ['latin'],
+  weight: ['600', '700', '800'],
 });
 
 export const metadata: Metadata = {
-  title: "MineCurry",
-  description: "Downloads for MineCurry",
+  title: 'MineCurry',
+  description: 'Downloads for MineCurry',
 };
 
 export default function RootLayout({
@@ -25,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${zalandoSans.variable} ${zalandoSansExpanded.variable} antialiased`}
       >
         {children}
       </body>
