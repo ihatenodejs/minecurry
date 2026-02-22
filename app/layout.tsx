@@ -1,17 +1,35 @@
 import type { Metadata } from 'next';
-import { Zalando_Sans_Expanded, Zalando_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 
-const zalandoSans = Zalando_Sans({
+const zalandoSans = localFont({
+  src: [
+    {
+      path: '../public/font/ZalandoSans.ttf',
+      style: 'normal',
+    },
+    {
+      path: '../public/font/ZalandoSans-Italic.ttf',
+      style: 'italic',
+    },
+  ],
   variable: '--font-zalando-sans',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  display: 'swap',
 });
 
-const zalandoSansExpanded = Zalando_Sans_Expanded({
+const zalandoSansExpanded = localFont({
+  src: [
+    {
+      path: '../public/font/ZalandoSansExpanded.ttf',
+      style: 'normal',
+    },
+    {
+      path: '../public/font/ZalandoSansExpanded-Italic.ttf',
+      style: 'italic',
+    },
+  ],
   variable: '--font-zalando-sans-expanded',
-  subsets: ['latin'],
-  weight: ['600', '700', '800'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
