@@ -1,10 +1,7 @@
 node_modules/
 .next/
-out/
-build/
-dist/
-package-lock.json
-bun.lock
+public/
+bun.lock*
 .env
 .env.*
 .DS_Store

@@ -4,19 +4,58 @@ import { ServerIPCard } from '@/components/server-ip-card';
 import { GettingStartedCard } from '@/components/getting-started-card';
 import { DownloadsCard } from '@/components/downloads-card';
 
-async function getFiles() {
-  const filesDirectory = path.join(process.cwd(), 'public/files');
+export type ModpackFile = {
+  name: string;
+  url: string;
+  size: number;
+};
+
+export type ModpackData = {
+  default: ModpackFile[];
+  builder: ModpackFile[];
+};
+
+async function getModpackFiles(
+  type: 'default' | 'builder'
+): Promise<ModpackFile[]> {
+  const directory = path.join(process.cwd(), `public/modpack/${type}`);
   try {
-    const filenames = await fs.promises.readdir(filesDirectory);
-    return filenames.filter((file) => !file.startsWith('.'));
+    const filenames = await fs.promises.readdir(directory);
+    const validFiles = filenames.filter((file) => !file.startsWith('.'));
+
+    const filesWithStats = await Promise.all(
+      validFiles.map(async (file) => {
+        const filePath = path.join(directory, file);
+        const stats = await fs.promises.stat(filePath);
+        return {
+          name: file,
+          url: `/modpack/${type}/${file}`,
+          size: stats.size,
+        };
+      })
+    );
+
+    return filesWithStats.sort((a, b) => b.name.localeCompare(a.name));
   } catch (error) {
-    console.error('Error reading files directory:', error);
+    console.error(`Error reading ${type} directory:`, error);
     return [];
   }
 }
 
+async function getFiles(): Promise<ModpackData> {
+  const [defaultFiles, builderFiles] = await Promise.all([
+    getModpackFiles('default'),
+    getModpackFiles('builder'),
+  ]);
+
+  return {
+    default: defaultFiles,
+    builder: builderFiles,
+  };
+}
+
 export default async function Home() {
-  const files = await getFiles();
+  const modpackData = await getFiles();
 
   return (
     <div className="min-h-screen bg-background">
@@ -35,10 +74,10 @@ export default async function Home() {
             </h3>
           </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
             <div className="lg:col-span-1 flex flex-col gap-6 lg:gap-8">
               <ServerIPCard />
-              <DownloadsCard files={files} />
+              <DownloadsCard modpackData={modpackData} />
             </div>
             <div className="lg:col-span-2">
               <GettingStartedCard />
